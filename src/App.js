@@ -1,124 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css"
-
-class TodoList extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      todos: [],
-      value: "",
-      isHidden:false
-    };
-  }
-
-  handleChange = (event) => {
-    const value = event.target.value;
-    this.setState({ value: value });
-  };
-
-  handleClick = () => {
-    const todo = {
-      value: this.state.value,
-      isInEditMode: false,
-      isHidden: false,
-      isDone: false
-    };
-
-    this.setState({
-      todos: [...this.state.todos, todo],
-      value: ""
-    });
-
-    // this.setState((prevState) => {
-    //   return {
-    //     todos: [...prevState.todos, prevState.value],
-    //     value: ''
-    //   };
-    // });
-  };
-
-  handleIsDoneChange = (event) => {
-    this.setState((prevState) => {
-      return {
-        todos: prevState.todos.map((todo) => {
-          if (todo.value === event.target.id) {
-            return {
-              ...todo,
-              isDone: event.target.checked
-            };
-          }
-          return todo;
-        })
-      };
-    });
-  };
-
-  handleDeleteClick = (todoValue) => {
-    this.setState((prevState) => {
-      return {
-        todos: prevState.todos.filter((item) => item.value !== todoValue)
-      };
-    });
-  };
-
-  handleEditButton = (todoValue) => {
-
-  }
-
-  handleHideToDo = (todoValue) => {
-    this.setState((prevState) => {
-      return {
-        todos: prevState.todos.map((todo) => {
-          if (todo.value === todoValue) {
-            return {
-              ...todo,
-              isHidden: !todo.isHidden
-              
-            }
-          }
-          return todo;
-        })
-      }
-    })
-
-  }
-
-  render() {
-    const { value, todos } = this.state;
-    return (
-      <div>
-        <input value={value} onChange={this.handleChange} />
-        <button onClick={this.handleClick}>Add</button>
-        <div>
-          {todos.map((todo, index) => (
-            <div key={index}>
-              <input
-                type="checkbox"
-                id={todo.value}
-                checked={todo.isDone}
-                onChange={this.handleIsDoneChange}
-              />
-              <span className={todo.isHidden ? 'blur' : ""}>{todo.value}</span>
-              <button>Edit</button>
-              <button onClick={() => this.handleHideToDo(todo.value)}>
-              {todo.isHidden ? "Unhide" : "Hide"}
-              </button>
-              <button onClick={() => this.handleDeleteClick(todo.value)}>
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-}
+import TodoList from "./TodoList/TodoLists";
+import TodoForm from './TodoForm/TodoForm'
+import TodoFooter from './TodoFooter/TodoFooter'
 
 export default function App() {
+
+  const [todos, setTodos] = useState([
+    {
+      id: Math.random(),
+      text: 'Learn JS',
+      isCompleted: false
+    },
+
+    {
+      id: Math.random(),
+      text: 'Learn css',
+      isCompleted: false
+    },
+
+    {
+      id: Math.random(),
+      text: 'Learn React',
+      isCompleted: false
+    },
+  ])
+
   return (
     <div className="App">
-      <TodoList />
+      <TodoForm onAdd={(text) => {
+        if(text){
+          setTodos([
+            ...todos,
+            {
+              id: Math.random(),
+              text: text,
+              isCompleted: false,
+            }
+  
+          ])
+        }else(alert('empty value'))
+        
+      }} />
+      <TodoList
+        todos={todos}
+        onChange={(newTodo) => {
+          setTodos(todos.map((todo) => {
+            if (todo.id === newTodo.id) {
+              return newTodo;
+            }
+            return todo;
+          }))
+        }}
+        onDelete={(todo) => {
+          setTodos(todos.filter((t) => t.id !== todo.id))
+        }}
+      />
+      <TodoFooter todos={todos} onClearCompleted={() => {
+        setTodos(todos.filter((todo) => !todo.isCompleted))
+      }} />
     </div>
   );
 }

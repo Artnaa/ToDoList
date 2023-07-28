@@ -1,0 +1,21 @@
+.todoitem {
+  box-sizing: border-box;
+}
+.todoitem input {
+  margin-right: 40px;
+}
+.todoitem label {
+  border-bottom: 0.5px solid white;
+  border-bottom-style: dashed;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 3px 0;
+}
+.todoitem label button {
+  border: 0.3px solid black;
+  padding: 0 7px;
+  background-color: rgba(255, 255, 255, 0.278);
+  color: white;
+  margin-left: 40px;
+}

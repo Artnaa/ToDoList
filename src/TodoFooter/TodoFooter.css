@@ -1,0 +1,7 @@
+.footer {
+  display: flex;
+}
+.footer span {
+  padding: 10px;
+  color: white;
+}
